@@ -1,5 +1,7 @@
 var current_filter_list = {};
 
+var numberPages;
+
 var numberPerPage = 10;
 
 var currentPage = 1;
@@ -25,6 +27,7 @@ function firstPage() {
 
 function lastPage() {
     currentPage = numberOfPages(filteredSet);
+    
     loadList();
 }
 
@@ -34,14 +37,15 @@ function loadList(){
 
     pageList = filteredSet.slice(begin, end);
     renderTable(pageList);
+    numberPages = numberOfPages(filteredSet);
     check();
 }
 
 function check() {
-    document.getElementById("next").disabled = currentPage == numberOfPages ? true : false;
+    document.getElementById("next").disabled = currentPage == numberPages ? true : false;
     document.getElementById("previous").disabled = currentPage == 1 ? true : false;
     document.getElementById("first").disabled = currentPage == 1 ? true : false;
-    document.getElementById("last").disabled = currentPage == numberOfPages ? true : false;
+    document.getElementById("last").disabled = currentPage == numberPages ? true : false;
 }
 
 function applyCurrentFilters(){
