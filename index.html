@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script type="text/javascript" src="data.js"></script>
+    <script type="text/javascript" src="data_aggregate.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+   
+</head>
+<body>
+   <header>
+      
+           <div class="jumbotron jumbotron-fluid bg-dark text-success">
+                <div class="display-3" style="text-align: center;vertical-align: middle;">
+                      <strong>UFO Sightings</strong>  
+                </div>
+                <div class="entry-page">
+              
+           </div>
+      </div>
+       
+   </header>
+
+   <main>
+       <div class="row">
+           <div class="col-md-4 col-sm-12">
+               <div class="container">
+                    <div class="dropdown">
+                            <select class="bootstrap-select" onchange="drawplot(this.value)">
+                                    <option value="country" selected="selected">Country</option>
+                                    <option value="state">State</option>
+                                    <option value="duration" >Duration</option>
+                                    <option value="shape">Shape</option>
+                                    
+                            </select>
+                    </div>
+            
+                    
+                        <div id="myDiv">
+
+                        </div>
+                    
+               </div>
+           </div>
+           <div class="col-md-8">
+                <div class="container">
+                        <div class="row" id="row-main">
+                            <div class="col-md-3 collapsed" id="sidebar">
+                                    <div class="card-block">
+                                           <div class="card-title" style="font-weight:bolder">Search navigation</div>
+                                            <div class="card-text">
+                                                    <form id = "filter-form">
+                                                            <div class="row">
+                                                                <div class="radio col-md-6">
+                                                                    <label class="radio"><input type="radio" name="optradio" value="datetime">Date</label>
+                                                                    <label class="radio"><input type="radio" name="optradio" value="country">Country</label>
+                                                                    <label class="radio"><input type="radio" name="optradio" value="state">State</label>
+                                                                    <label class="radio"><input type="radio" name="optradio" value="city">City</label>
+                                                                    <label class="radio"><input type="radio" name="optradio" value="shape">Shape</label>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                            <div class="row">
+                                                                <div class="col-md-12">
+                                                                        <div class="input">
+                                                                                <div class="row">
+                                                                                    <div class="col-md-10">
+                                                                                            <input id="filter-val" type="text" class="form-control" placeholder="Filter value..."><br>        
+                                                                                    </div>
+                                                                                       
+                                                                                </div>
+                                                                                <div class="row">
+                                                                                    <div class="col-md-6"><button type="reset" class="btn btn-sm">Reset</button></div>
+                                                                                    <div class="col-md-6"><button type="submit" class="btn btn-sm" type="button">Apply</button></div>      
+                                                                                </div>
+                                                                                
+                                                                        </div>
+                                                                </div>
+                                                            </div> 
+                                                        </form>
+                                                        
+                                                    </div> 
+                                    </div>
+                                    
+                            </div>
+                            <div class="col-md-12" id="content">
+                                <div class="container">
+                                    <div class="row">
+                                            <div class="col-md-3">
+                                                    <button type="button" class="btn btn-sm" id="sidebar-btn">Filter ..</button>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <div class="row">
+                                                        <div id="currentFilters">
+                                                            
+                                                        </div>
+                                                </div>
+                                            </div>
+                                    </div>
+                                    <div class="row" style="margin-left:30%">
+                                        <input type="button" class="btn btn-sm" id="first" onclick="firstPage()" value="<<" />
+                                        <input type="button" class="btn btn-sm" id="previous" onclick="previousPage()" value="<" />
+                                        <input type="button" class="btn btn-sm" id="next" onclick="nextPage()" value=">" />            
+                                        <input type="button" class="btn btn-sm" id="last" onclick="lastPage()" value=">>" />
+                                    </div>
+                                        <table class="table table-striped table-hover">
+                                                <thead class="thead-inverse bg-dark text-white">
+                                                    <tr>
+                                                            <td>Serial Number</td>
+                                                            <td>datetime</td>                  
+                                                            <td>city</td>              
+                                                            <td>state</td>                
+                                                            <td>country</td>
+                                                            <td>shape</td>
+                                                            <td>durationMinutes</td>
+                                                            <td>comments</td>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                    
+                                                </tbody>
+                                        </table>
+                                </div>
+                            </div>
+                        </div>
+           </div>
+           </div>
+        </div>
+       
+
+        
+
+        
+
+        
+        <script src="index.js"></script>
+        <script src="plots.js"></script>
+
+   </main>
+
+   <footer>
+
+   </footer>
+</body>
+</html>
